@@ -1,0 +1,72 @@
+[
+  {
+    "repo": "file_asshukun",
+    "name": "ファイル圧縮君",
+    "description": "",
+    "url": "https://ken-tak-steam.github.io/file_asshukun/",
+    "download": "https://ken-tak-steam.github.io/file_asshukun/download.html"
+  },
+  {
+    "repo": "haguruma-sim",
+    "name": "歯車シミュレータ君",
+    "description": "",
+    "url": "https://ken-tak-steam.github.io/haguruma-sim/",
+    "download": "https://ken-tak-steam.github.io/haguruma-sim/download.html"
+  },
+  {
+    "repo": "img_digital_kun",
+    "name": "画像のデジタル化君",
+    "description": "",
+    "url": "https://ken-tak-steam.github.io/img_digital_kun/",
+    "download": "https://ken-tak-steam.github.io/img_digital_kun/download.html"
+  },
+  {
+    "repo": "itazai-tkt",
+    "name": "板材設計_TKT",
+    "description": "板材設計_TKT",
+    "url": "https://ken-tak-steam.github.io/itazai-tkt/",
+    "download": null
+  },
+  {
+    "repo": "kiko-sim",
+    "name": "機構シミュレータ君",
+    "description": "",
+    "url": "https://ken-tak-steam.github.io/kiko-sim/",
+    "download": "https://ken-tak-steam.github.io/kiko-sim/download.html"
+  },
+  {
+    "repo": "koukaishashin_shiagerukun",
+    "name": "公開写真しあげる君",
+    "description": "",
+    "url": "https://ken-tak-steam.github.io/koukaishashin_shiagerukun/",
+    "download": "https://ken-tak-steam.github.io/koukaishashin_shiagerukun/download.html"
+  },
+  {
+    "repo": "pdf_kakikomikun",
+    "name": "PDF書き込み君",
+    "description": "",
+    "url": "https://ken-tak-steam.github.io/pdf_kakikomikun/",
+    "download": "https://ken-tak-steam.github.io/pdf_kakikomikun/download.html"
+  },
+  {
+    "repo": "pdf_matomerukun",
+    "name": "PDFまとめる君",
+    "description": "",
+    "url": "https://ken-tak-steam.github.io/pdf_matomerukun/",
+    "download": "https://ken-tak-steam.github.io/pdf_matomerukun/download.html"
+  },
+  {
+    "repo": "text_digital_kun",
+    "name": "文字のデジタル化君",
+    "description": "",
+    "url": "https://ken-tak-steam.github.io/text_digital_kun/",
+    "download": "https://ken-tak-steam.github.io/text_digital_kun/download.html"
+  },
+  {
+    "repo": "trimming-kun",
+    "name": "トリミング君",
+    "description": "HTMLでオフラインでも端末上で動作。複数の画像を指定のサイズに一括トリミング。トリミングは実行前にプレビュー 。一括リネーム。画像をまとめて１つのPDFに変換。PDFの各ページの特定の場所をトリミングし、jpegやPDFで保存",
+    "url": "https://ken-tak-steam.github.io/trimming-kun/",
+    "download": "https://ken-tak-steam.github.io/trimming-kun/download.html"
+  }
+]
