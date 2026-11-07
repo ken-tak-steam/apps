@@ -56,6 +56,13 @@
     "download": "https://ken-tak-steam.github.io/pdf_matomerukun/download.html"
   },
   {
+    "repo": "sound_digital_kun",
+    "name": "音のデジタル化君",
+    "description": "3秒の音で標本化・量子化・符号化と圧縮を体験する学習アプリ。",
+    "url": "https://ken-tak-steam.github.io/sound_digital_kun/",
+    "download": "https://ken-tak-steam.github.io/sound_digital_kun/download.html"
+  },
+  {
     "repo": "text_digital_kun",
     "name": "文字のデジタル化君",
     "description": "",
