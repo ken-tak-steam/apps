@@ -21,6 +21,13 @@
     "download": "https://ken-tak-steam.github.io/img_digital_kun/download.html"
   },
   {
+    "repo": "img_digital_kun2",
+    "name": "画像のデジタル化君２",
+    "description": "標本化・量子化・符号化と解像度を、絵を描きながら体験する学習アプリ。",
+    "url": "https://ken-tak-steam.github.io/img_digital_kun2/",
+    "download": "https://ken-tak-steam.github.io/img_digital_kun2/download.html"
+  },
+  {
     "repo": "kiko-sim",
     "name": "機構シミュレータ君",
     "description": "",

@@ -42,7 +42,7 @@ def discover():
         base=f"https://{OWNER}.github.io/{repo['name']}/"
         apps.append({'repo':repo['name'],'name':label,'description':repo.get('description') or '', 'url':base if repo['has_pages'] else None,'download':base+'download.html' if repo['has_pages'] and 'download.html' in names else None})
     return sorted(apps,key=lambda a:a['repo'])
-NOTE_DATA = {}  # Explicit overrides: repo -> {"note": URL, "image": URL}
+NOTE_DATA = {"img_digital_kun2": {"image": "assets/img_digital_kun2.png"}}
 NOTE_MAGAZINE = "m8cd98d430c14"
 NOTE_AUTHOR = "kentak2020"
 
@@ -104,15 +104,20 @@ def match_note_data(apps):
     result = dict(NOTE_DATA)
     entries = note_entries()
     for app in apps:
-        if app['repo'] in result:
+        if result.get(app['repo'], {}).get('note'):
             continue
         name = app["name"].strip()
+        longer_names = [other["name"].strip().casefold() for other in apps
+                        if len(other["name"].strip()) > len(name)
+                        and other["name"].strip().casefold().startswith(name.casefold())]
         matches = [entry for entry in entries if name and
-                   name.casefold() in unescape(entry["title"]).casefold()]
+                   name.casefold() in unescape(entry["title"]).casefold()
+                   and not any(longer in unescape(entry["title"]).casefold()
+                               for longer in longer_names)]
         if len(matches) != 1:
             continue
         entry = matches[0]
-        image = entry["image"]
+        image = result.get(app['repo'], {}).get('image') or entry["image"]
         if not image:
             try:
                 page = note_request(entry["url"]).decode("utf-8", "replace")
