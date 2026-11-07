@@ -8,6 +8,7 @@ from html import escape
 from datetime import datetime
 from zoneinfo import ZoneInfo
 OWNER = 'ken-tak-steam'
+HIDDEN_REPOS = {'itazai-tkt'}
 ROOT = Path(__file__).resolve().parents[1]
 def get(path):
     headers = {'Accept':'application/vnd.github+json','User-Agent':'apps-catalog'}
@@ -24,7 +25,7 @@ def discover():
         page+=1
     apps=[]
     for repo in repos:
-        if repo['name']=='apps' or repo['fork'] or repo['archived']: continue
+        if repo['name']=='apps' or repo['name'] in HIDDEN_REPOS or repo['fork'] or repo['archived']: continue
         try:
             files=get(f"/repos/{OWNER}/{repo['name']}/contents/")
         except urllib.error.HTTPError as error:
@@ -160,4 +161,4 @@ if __name__ == '__main__':
         if not apps:
             raise RuntimeError('No applications found; keep existing catalog')
         (ROOT/'apps.json').write_text(json.dumps(apps, ensure_ascii=False, indent=2)+'\n')
-    render(apps)
+    render([app for app in apps if app['repo'] not in HIDDEN_REPOS])
