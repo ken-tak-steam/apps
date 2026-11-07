@@ -1,5 +1,7 @@
 """Generate a static catalog from public GitHub repositories (standard library only)."""
 import json, os, re, urllib.request, urllib.error
+import xml.etree.ElementTree as ET
+from html import unescape
 from urllib.parse import quote
 from pathlib import Path
 from html import escape
@@ -39,13 +41,96 @@ def discover():
         base=f"https://{OWNER}.github.io/{repo['name']}/"
         apps.append({'repo':repo['name'],'name':label,'description':repo.get('description') or '', 'url':base if repo['has_pages'] else None,'download':base+'download.html' if repo['has_pages'] and 'download.html' in names else None})
     return sorted(apps,key=lambda a:a['repo'])
-NOTE_DATA = {}  # Add verified note article and thumbnail URLs here.
+NOTE_DATA = {}  # Explicit overrides: repo -> {"note": URL, "image": URL}
+NOTE_MAGAZINE = "m8cd98d430c14"
+NOTE_AUTHOR = "kentak2020"
+
+def note_request(url):
+    request = urllib.request.Request(url, headers={
+        "User-Agent": "Mozilla/5.0 (compatible; KENTAK-Apps/1.0)",
+        "Accept": "application/json, application/xml, text/xml, */*",
+    })
+    with urllib.request.urlopen(request, timeout=15) as response:
+        return response.read()
+
+def note_entries():
+    """Prefer the given magazine; fall back to the author's public RSS feed."""
+    entries = []
+    for page in range(1, 5):
+        try:
+            url = f"https://note.com/api/v2/magazines/{NOTE_MAGAZINE}/contents?limit=20&page={page}"
+            data = json.loads(note_request(url))
+            payload = data.get("data", data)
+            items = payload.get("contents", []) if isinstance(payload, dict) else []
+            if not items:
+                break
+            for item in items:
+                article = item.get("note", item) if isinstance(item, dict) else {}
+                if not isinstance(article, dict):
+                    continue
+                title = article.get("name") or article.get("title") or ""
+                key = article.get("key") or article.get("note_key")
+                url = article.get("note_url") or article.get("url") or (
+                    f"https://note.com/{NOTE_AUTHOR}/n/{key}" if key else "")
+                image = article.get("eyecatch") or article.get("eyecatch_url") or ""
+                if title and url and f"note.com/{NOTE_AUTHOR}/n/" in url:
+                    entries.append({"title": title, "url": url, "image": image})
+            if len(items) < 20:
+                break
+        except (OSError, ValueError, TypeError, AttributeError) as error:
+            print(f"note magazine unavailable: {error}")
+            break
+    if entries:
+        return entries
+    try:
+        root = ET.fromstring(note_request(f"https://note.com/{NOTE_AUTHOR}/rss"))
+        for item in root.findall(".//item"):
+            title = item.findtext("title") or ""
+            url = item.findtext("link") or ""
+            image = ""
+            for node in item.iter():
+                if node.tag.rsplit("}", 1)[-1] in ("thumbnail", "content") and node.attrib.get("url"):
+                    image = node.attrib["url"]
+                    break
+            if title and f"note.com/{NOTE_AUTHOR}/n/" in url:
+                entries.append({"title": title, "url": url, "image": image})
+    except (OSError, ET.ParseError) as error:
+        print(f"note RSS unavailable: {error}")
+    return entries
+
+def match_note_data(apps):
+    """Match a distinct app name in the article title, never by approximate similarity."""
+    result = dict(NOTE_DATA)
+    entries = note_entries()
+    for app in apps:
+        if app['repo'] in result:
+            continue
+        name = app["name"].strip()
+        matches = [entry for entry in entries if name and
+                   name.casefold() in unescape(entry["title"]).casefold()]
+        if len(matches) != 1:
+            continue
+        entry = matches[0]
+        image = entry["image"]
+        if not image:
+            try:
+                page = note_request(entry["url"]).decode("utf-8", "replace")
+                match = re.search(r'<meta[^>]+property=["\\\']og:image["\\\'][^>]+content=["\\\']([^"\\\']+)', page, re.I)
+                if not match:
+                    match = re.search(r'<meta[^>]+content=["\\\']([^"\\\']+)["\\\'][^>]+property=["\\\']og:image', page, re.I)
+                image = unescape(match.group(1)) if match else ""
+            except OSError:
+                pass
+        result[app['repo']] = {"note": entry["url"], "image": image}
+    print("Matched note articles:", sorted(result))
+    return result
 
 def render(apps):
+    note_data = match_note_data(apps)
     cards = []
     for a in apps:
         name = escape(a['name'])
-        data = NOTE_DATA.get(a['repo'], {})
+        data = note_data.get(a['repo'], {})
         image = data.get('image')
         note = data.get('note')
         visual = (f'<img src="{escape(image, quote=True)}" alt="{name}のnote見出し画像" loading="lazy">' if image
