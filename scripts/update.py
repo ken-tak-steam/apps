@@ -39,28 +39,7 @@ def discover():
         base=f"https://{OWNER}.github.io/{repo['name']}/"
         apps.append({'repo':repo['name'],'name':label,'description':repo.get('description') or '', 'url':base if repo['has_pages'] else None,'download':base+'download.html' if repo['has_pages'] and 'download.html' in names else None})
     return sorted(apps,key=lambda a:a['repo'])
-NOTE_DATA = {
-    'file_asshukun': {
-        'image': 'https://assets.st-note.com/production/uploads/images/326813055/rectangle_large_type_2_50021050485a1eb1f2bb2f94ed88e95f.png?dpr=2&frame=1&width=297',
-        'note': 'https://note.com/kentak2020',
-    },
-    'trimming-kun': {
-        'image': 'https://assets.st-note.com/production/uploads/images/326785150/rectangle_large_type_2_30bf994ea27cec5c756ace3d3b1595da.png?dpr=2&frame=1&width=297',
-        'note': 'https://note.com/kentak2020',
-    },
-    'koukaishashin_shiagerukun': {
-        'image': 'https://assets.st-note.com/production/uploads/images/328367837/rectangle_large_type_2_36bf32f61b5de3be47ca11d4185b9091.png?dpr=2&frame=1&width=297',
-        'note': 'https://note.com/kentak2020/n/nefb63a7a25f4',
-    },
-    'pdf_kakikomikun': {
-        'image': 'https://assets.st-note.com/production/uploads/images/327597417/rectangle_large_type_2_5ab9770306014a7b28c32151bb2de78f.png?dpr=2&frame=1&width=297',
-        'note': 'https://note.com/kentak2020/n/n64befef18889',
-    },
-    'pdf_matomerukun': {
-        'image': 'https://assets.st-note.com/production/uploads/images/326551708/rectangle_large_type_2_db2731787615481ef0c46921811b3041.png?dpr=2&frame=1&width=297',
-        'note': 'https://note.com/kentak2020/n/n853f091cb1bf',
-    },
-}
+NOTE_DATA = {}  # Add verified note article and thumbnail URLs here.
 
 def render(apps):
     cards = []
